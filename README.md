@@ -1,101 +1,109 @@
 # ANN Case Study on Customer Churn Rate
 
-Business case study for predicting customer churn using an Artificial Neural Network (ANN) with TensorFlow and Keras in Python.
+End-to-end business case study for predicting bank customer churn with an Artificial Neural Network (ANN) built using TensorFlow and Keras.
 
-## Project Overview
+## Executive Summary
 
-This project builds and evaluates an ANN model to predict whether a bank customer is likely to churn (`Exited = 1`).
+This project develops a supervised binary-classification model to identify customers likely to churn (`Exited = 1`).  
+The solution includes data preparation, ANN training, model evaluation, reproducible artifacts, and a professional PDF report with supporting visuals.
 
-The workflow includes:
-- Data preprocessing (scaling + encoding)
-- Train/test split
-- ANN model training
-- Model evaluation using classification metrics
-- Export of model artifacts
-- PDF case study report with visuals
+## Objectives
+
+- Predict customer attrition risk at the individual level.
+- Quantify model quality with classification metrics and ROC-AUC.
+- Provide a reproducible baseline for retention strategy optimization.
 
 ## Dataset
 
-- Source file: `Artificial_Neural_Network_Case_Study_data.csv`
-- Records: `10,000`
-- Target variable: `Exited`
-- Input features include:
-  - Credit profile (`CreditScore`, `Balance`, `NumOfProducts`)
+- File: `Artificial_Neural_Network_Case_Study_data.csv`
+- Size: `10,000` records
+- Target variable: `Exited` (`0` = retained, `1` = churned)
+- Feature groups:
+  - Credit and account profile (`CreditScore`, `Balance`, `NumOfProducts`)
   - Demographics (`Geography`, `Gender`, `Age`)
   - Engagement (`HasCrCard`, `IsActiveMember`, `Tenure`)
   - Financial indicator (`EstimatedSalary`)
 
-Dropped identifier columns:
+Identifier fields excluded from modeling:
 - `RowNumber`
 - `CustomerId`
 - `Surname`
 
-## Model Architecture (TensorFlow/Keras)
+## Methodology
 
+### Preprocessing
+- Train/test split: `80/20` with stratification.
+- Numeric features: standardized using `StandardScaler`.
+- Categorical features: encoded with `OneHotEncoder(handle_unknown="ignore")`.
+
+### ANN Architecture
 - Dense(32, ReLU)
-- Dropout(0.2)
+- Dropout(0.20)
 - Dense(16, ReLU)
-- Dropout(0.1)
+- Dropout(0.10)
 - Dense(1, Sigmoid)
 
-Training setup:
-- Loss: `binary_crossentropy`
-- Optimizer: `Adam`
-- Validation split: `0.2`
-- Early stopping enabled
+### Training Configuration
+- Loss function: `binary_crossentropy`
+- Optimizer: `Adam` (`learning_rate=0.001`)
+- Batch size: `32`
+- Epochs: up to `100`
+- Regularization: early stopping on validation loss
 
-## Evaluation Results
+## Performance (Latest Run)
 
-From the latest run:
 - Accuracy: `0.8650`
 - Precision: `0.7915`
 - Recall: `0.4570`
 - F1-score: `0.5794`
 - ROC-AUC: `0.8664`
 
-## Generated Outputs
+Interpretation:
+- The model shows strong ranking performance (ROC-AUC).
+- Recall can be improved further through threshold tuning or class-weighting, depending on retention campaign priorities.
 
-### Code and Documentation
-- `churn_ann_case_study.py` - ANN training and evaluation pipeline
-- `CASE_STUDY_ANN_CHURN.md` - Written business case study
-- `generate_case_study_pdf.py` - PDF report generator with images
+## Repository Structure
 
-### Artifacts
+### Core Scripts
+- `churn_ann_case_study.py` - Model training and evaluation pipeline
+- `generate_case_study_pdf.py` - Professional PDF report generator
+
+### Case Study Documents
+- `CASE_STUDY_ANN_CHURN.md` - Narrative business case study
+- `ANN_Customer_Churn_Case_Study.pdf` - Final report with visuals
+
+### Model and Data Artifacts
 - `artifacts/churn_ann_model.keras` - Trained ANN model
 - `artifacts/churn_preprocessor.joblib` - Fitted preprocessing pipeline
-- `artifacts/training_history.joblib` - Training history
+- `artifacts/training_history.joblib` - Epoch-level training history
 
-### Visuals and Report
+### Visual Outputs
 - `ann_training_curves.png`
 - `ann_test_metrics.png`
-- `ANN_Customer_Churn_Case_Study.pdf`
 
-## How to Run
+## Quick Start
 
-1. Install dependencies:
-
+1) Install dependencies
 ```bash
 pip install tensorflow-intel pandas scikit-learn numpy joblib matplotlib
 ```
 
-2. Train and evaluate model:
-
+2) Train and evaluate the ANN
 ```bash
 python churn_ann_case_study.py
 ```
 
-3. Generate PDF report with images:
-
+3) Generate the professional PDF report
 ```bash
 python generate_case_study_pdf.py
 ```
 
-## Business Value
+## Business Impact
 
-- Supports proactive retention strategy by identifying likely churners.
-- Enables campaign targeting using churn probability scores.
-- Provides a reproducible baseline ANN pipeline for further optimization.
+- Enables early identification of high-risk customers.
+- Supports targeted retention interventions and budget allocation.
+- Establishes a reusable ML baseline for future model comparisons and improvements.
 
-## Author
+## Repository
 
-Repository: [DAlgoSculptor/ANN_Case_Study_on_Churn_rate](https://github.com/DAlgoSculptor/ANN_Case_Study_on_Churn_rate)
+[DAlgoSculptor/ANN_Case_Study_on_Churn_rate](https://github.com/DAlgoSculptor/ANN_Case_Study_on_Churn_rate)

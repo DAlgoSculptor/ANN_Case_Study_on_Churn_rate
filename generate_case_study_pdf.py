@@ -63,66 +63,98 @@ def create_metric_bar_chart(metrics: dict, output_path: Path) -> None:
     plt.close(fig)
 
 
+def add_page_header(fig: plt.Figure, title: str, subtitle: str) -> None:
+    fig.text(0.07, 0.96, title, fontsize=16, fontweight="bold", va="top")
+    fig.text(0.07, 0.93, subtitle, fontsize=10.5, color="#444444", va="top")
+    line = plt.Line2D([0.07, 0.93], [0.915, 0.915], color="#999999", linewidth=0.8)
+    fig.add_artist(line)
+
+
 def build_pdf_report(pdf_path: Path, img1: Path, img2: Path, metrics: dict) -> None:
     with PdfPages(pdf_path) as pdf:
-        fig = plt.figure(figsize=(8.27, 11.69))  # A4 portrait
+        # Page 1: Executive report page
+        fig = plt.figure(figsize=(8.27, 11.69))
         fig.patch.set_facecolor("white")
         plt.axis("off")
 
-        title = "Business Case Study: Customer Churn Prediction with ANN"
-        body = (
-            "Objective:\n"
-            "Predict customer churn (Exited = 1) using an Artificial Neural Network\n"
-            "built with TensorFlow and Keras.\n\n"
-            "Dataset:\n"
-            "- 10,000 customer records\n"
-            "- Features include demographics, account profile, engagement, and salary\n"
-            "- Target variable: Exited (0 = retained, 1 = churned)\n\n"
-            "Modeling approach:\n"
-            "- Preprocessing: StandardScaler + OneHotEncoder\n"
-            "- ANN architecture: Dense(32) -> Dropout(0.2) -> Dense(16) -> Dropout(0.1) -> Sigmoid\n"
-            "- Early stopping used to avoid overfitting\n\n"
-            "Test-set performance:\n"
-            f"- Accuracy:  {metrics['accuracy']:.4f}\n"
-            f"- Precision: {metrics['precision']:.4f}\n"
-            f"- Recall:    {metrics['recall']:.4f}\n"
-            f"- F1-score:  {metrics['f1_score']:.4f}\n"
-            f"- ROC-AUC:   {metrics['roc_auc']:.4f}\n\n"
-            "Business insight:\n"
-            "The model provides strong overall discrimination (high ROC-AUC), while recall\n"
-            "can be further improved via threshold tuning or class weighting for retention campaigns."
+        add_page_header(
+            fig,
+            "Customer Churn Prediction Case Study",
+            "Artificial Neural Network (TensorFlow/Keras) | Professional Summary",
         )
 
-        fig.text(0.07, 0.95, title, fontsize=16, fontweight="bold", va="top")
-        fig.text(0.07, 0.90, body, fontsize=10.5, va="top")
+        body = (
+            "1. Problem Statement\n"
+            "This study predicts churn probability for bank customers to support proactive\n"
+            "retention interventions and reduce avoidable attrition.\n\n"
+            "2. Dataset and Scope\n"
+            "- 10,000 customer records\n"
+            "- Target: Exited (0 = retained, 1 = churned)\n"
+            "- Feature groups: demographics, account profile, engagement, salary\n"
+            "- Identifier fields excluded: RowNumber, CustomerId, Surname\n\n"
+            "3. Modeling Approach\n"
+            "- Preprocessing: StandardScaler + OneHotEncoder\n"
+            "- Train/test split: 80/20 with stratification\n"
+            "- ANN: Dense(32) -> Dropout(0.20) -> Dense(16) -> Dropout(0.10) -> Sigmoid\n"
+            "- Training controls: Adam optimizer, binary cross-entropy, early stopping\n\n"
+            "4. Performance on Test Set\n"
+            f"- Accuracy : {metrics['accuracy']:.4f}\n"
+            f"- Precision: {metrics['precision']:.4f}\n"
+            f"- Recall   : {metrics['recall']:.4f}\n"
+            f"- F1-Score : {metrics['f1_score']:.4f}\n"
+            f"- ROC-AUC  : {metrics['roc_auc']:.4f}\n\n"
+            "5. Business Interpretation\n"
+            "- Strong ROC-AUC indicates effective ranking of churn risk.\n"
+            "- Precision is favorable for focused retention spend.\n"
+            "- Recall can be improved by threshold optimization or class weighting.\n\n"
+            "6. Recommended Next Steps\n"
+            "- Calibrate decision thresholds by campaign budget and expected ROI.\n"
+            "- Compare with gradient boosting baselines.\n"
+            "- Add explainability (SHAP) for action-oriented interventions."
+        )
+
+        fig.text(0.07, 0.88, body, fontsize=10.6, va="top", linespacing=1.35)
+        fig.text(
+            0.07,
+            0.05,
+            "Prepared for: ANN Customer Churn Business Case Study",
+            fontsize=9,
+            color="#666666",
+        )
         pdf.savefig(fig, bbox_inches="tight")
         plt.close(fig)
 
+        # Page 2: Visual evidence page
         fig2 = plt.figure(figsize=(8.27, 11.69))
         fig2.patch.set_facecolor("white")
         plt.axis("off")
-        fig2.text(
-            0.07,
-            0.96,
-            "Model Images: Learning Curves and Metrics",
-            fontsize=15,
-            fontweight="bold",
-            va="top",
+        add_page_header(
+            fig2,
+            "Model Performance Visuals",
+            "Training behavior and evaluation summary",
         )
 
         image1 = plt.imread(img1)
         image2 = plt.imread(img2)
 
-        ax1 = fig2.add_axes([0.08, 0.52, 0.84, 0.36])
+        ax1 = fig2.add_axes([0.08, 0.53, 0.84, 0.35])
         ax1.imshow(image1)
         ax1.axis("off")
-        ax1.set_title("Training and Validation Curves", fontsize=11)
+        ax1.set_title("Figure 1. Training and Validation Curves", fontsize=11, pad=6)
 
-        ax2 = fig2.add_axes([0.14, 0.10, 0.72, 0.33])
+        ax2 = fig2.add_axes([0.14, 0.12, 0.72, 0.30])
         ax2.imshow(image2)
         ax2.axis("off")
-        ax2.set_title("Final Test Metrics", fontsize=11)
+        ax2.set_title("Figure 2. Final Test Metrics", fontsize=11, pad=6)
 
+        fig2.text(
+            0.08,
+            0.06,
+            "Note: Final deployment threshold should be selected based on retention cost and "
+            "campaign capacity constraints.",
+            fontsize=9,
+            color="#555555",
+        )
         pdf.savefig(fig2, bbox_inches="tight")
         plt.close(fig2)
 
