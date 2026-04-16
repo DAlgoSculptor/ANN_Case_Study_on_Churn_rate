@@ -145,6 +145,11 @@ Deploy on Streamlit Community Cloud:
   - **Repository**: your GitHub repo
   - **Main file path**: `streamlit_app.py`
   - **Python dependencies**: `requirements.txt`
+  - **Runtime**: uses `runtime.txt` (`python-3.11`) for TensorFlow wheel compatibility
+
+If you see `ModuleNotFoundError: No module named 'tensorflow'` on Streamlit Cloud:
+- Ensure `requirements.txt` uses `tensorflow` (not `tensorflow-intel`)
+- Reboot/redeploy the app from Streamlit Cloud after pulling latest commit
 
 ## Business Impact
 
