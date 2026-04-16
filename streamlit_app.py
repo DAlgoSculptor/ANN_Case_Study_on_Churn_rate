@@ -107,7 +107,7 @@ with right:
 
 if example_clicked:
     st.session_state["example_loaded"] = True
-    st.experimental_rerun()
+    st.rerun()
 
 if st.session_state.get("example_loaded"):
     row.update(
@@ -125,7 +125,7 @@ if st.session_state.get("example_loaded"):
         }
     )
     st.session_state["example_loaded"] = False
-    st.experimental_rerun()
+    st.rerun()
 
 if predict_clicked:
     try:
