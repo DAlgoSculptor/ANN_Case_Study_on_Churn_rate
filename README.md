@@ -98,6 +98,54 @@ python churn_ann_case_study.py
 python generate_case_study_pdf.py
 ```
 
+## API (FastAPI)
+
+This repo includes a small REST API to serve churn predictions from the saved artifacts.
+
+Run (from project root):
+
+```bash
+pip install fastapi uvicorn
+python -m uvicorn api.app:app --host 0.0.0.0 --port 8000 --reload
+```
+
+Docs:
+- Interactive Swagger UI: `http://127.0.0.1:8000/docs`
+- API notes: `api/README_API.md`
+
+## Frontend (Browser UI)
+
+A lightweight frontend is included in `frontend/` and calls the API.
+
+1) Start the API (see section above), then start a static server for the frontend:
+
+```bash
+python -m http.server 5173 --directory frontend
+```
+
+2) Open:
+- `http://127.0.0.1:5173`
+
+Note: CORS is enabled in the API to allow browser requests from the frontend.
+
+## Streamlit Deployment
+
+This repo includes a Streamlit app (`streamlit_app.py`) that loads the saved model artifacts and runs predictions in the browser.
+
+Run locally:
+
+```bash
+pip install -r requirements.txt
+streamlit run streamlit_app.py
+```
+
+Deploy on Streamlit Community Cloud:
+- Push the repo to GitHub (already done)
+- In Streamlit Cloud, set:
+  - **Repository**: your GitHub repo
+  - **Main file path**: `streamlit_app.py`
+  - **Python dependencies**: `requirements.txt`
+
 ## Business Impact
 
 - Enables early identification of high-risk customers.

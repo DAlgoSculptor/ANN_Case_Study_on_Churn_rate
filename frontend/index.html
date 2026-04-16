@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Churn Predictor (ANN)</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="header">
+        <h1>Customer Churn Predictor</h1>
+        <p>
+          Frontend UI connected to the ANN model API. Enter customer details and
+          get churn probability.
+        </p>
+      </header>
+
+      <section class="card">
+        <div class="row">
+          <label>
+            API Base URL
+            <input id="apiBaseUrl" type="url" value="http://127.0.0.1:8000" />
+          </label>
+          <label>
+            Threshold
+            <input id="threshold" type="number" min="0" max="1" step="0.01" value="0.5" />
+          </label>
+        </div>
+
+        <form id="predictForm">
+          <div class="grid">
+            <label>
+              CreditScore
+              <input name="CreditScore" type="number" required value="619" />
+            </label>
+            <label>
+              Geography
+              <select name="Geography" required>
+                <option>France</option>
+                <option>Germany</option>
+                <option>Spain</option>
+              </select>
+            </label>
+            <label>
+              Gender
+              <select name="Gender" required>
+                <option>Female</option>
+                <option>Male</option>
+              </select>
+            </label>
+            <label>
+              Age
+              <input name="Age" type="number" required value="42" />
+            </label>
+            <label>
+              Tenure
+              <input name="Tenure" type="number" required value="2" />
+            </label>
+            <label>
+              Balance
+              <input name="Balance" type="number" step="0.01" required value="0" />
+            </label>
+            <label>
+              NumOfProducts
+              <input name="NumOfProducts" type="number" required value="1" />
+            </label>
+            <label>
+              HasCrCard (0/1)
+              <input name="HasCrCard" type="number" min="0" max="1" required value="1" />
+            </label>
+            <label>
+              IsActiveMember (0/1)
+              <input
+                name="IsActiveMember"
+                type="number"
+                min="0"
+                max="1"
+                required
+                value="1"
+              />
+            </label>
+            <label>
+              EstimatedSalary
+              <input
+                name="EstimatedSalary"
+                type="number"
+                step="0.01"
+                required
+                value="101348.88"
+              />
+            </label>
+          </div>
+
+          <div class="actions">
+            <button id="predictBtn" type="submit">Predict</button>
+            <button id="fillExample2Btn" type="button" class="secondary">
+              Load example (higher risk)
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Result</h2>
+        <div id="result" class="result muted">No prediction yet.</div>
+        <details class="details">
+          <summary>Request/Response JSON</summary>
+          <pre id="jsonDump" class="code"></pre>
+        </details>
+      </section>
+
+      <footer class="footer">
+        <span>API docs: <a href="http://127.0.0.1:8000/docs" target="_blank" rel="noreferrer">/docs</a></span>
+      </footer>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
+
