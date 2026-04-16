@@ -84,6 +84,9 @@ def build_pdf_report(pdf_path: Path, img1: Path, img2: Path, metrics: dict) -> N
         )
 
         body = (
+            "Abstract\n"
+            "Supervised ANN for binary churn prediction (Exited) on 10k bank records;\n"
+            "metrics and learning curves support business interpretation.\n\n"
             "1. Problem Statement\n"
             "This study predicts churn probability for bank customers to support proactive\n"
             "retention interventions and reduce avoidable attrition.\n\n"

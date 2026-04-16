@@ -104,6 +104,18 @@ python generate_case_study_pdf.py
 - Supports targeted retention interventions and budget allocation.
 - Establishes a reusable ML baseline for future model comparisons and improvements.
 
+## Git workflow
+
+Stage, commit, and push using `-m` (with a space). Using `git commit m-"message"` is invalid and triggers a pathspec error.
+
+```bash
+git add .
+git commit -m "Your clear commit message"
+git push
+```
+
+Full narrative case study (abstract, methodology, results, appendices): see `CASE_STUDY_ANN_CHURN.md`.
+
 ## Repository
 
 [DAlgoSculptor/ANN_Case_Study_on_Churn_rate](https://github.com/DAlgoSculptor/ANN_Case_Study_on_Churn_rate)
