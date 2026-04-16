@@ -105,7 +105,7 @@ This repo includes a small REST API to serve churn predictions from the saved ar
 Run (from project root):
 
 ```bash
-pip install fastapi uvicorn
+pip install -r requirements_api.txt
 python -m uvicorn api.app:app --host 0.0.0.0 --port 8000 --reload
 ```
 
@@ -150,6 +150,11 @@ Deploy on Streamlit Community Cloud:
 If you see `ModuleNotFoundError: No module named 'tensorflow'` on Streamlit Cloud:
 - Ensure `requirements.txt` uses `tensorflow` (not `tensorflow-intel`)
 - Reboot/redeploy the app from Streamlit Cloud after pulling latest commit
+
+If Streamlit Cloud shows **"Error installing requirements"**:
+- Use the pinned `requirements.txt` in this repo (optimized for Streamlit Cloud Linux)
+- Keep only Streamlit app dependencies in that file (API deps removed intentionally)
+- In Streamlit Cloud: **Manage app -> Settings -> Advanced -> Clear cache**, then **Reboot app**
 
 ## Business Impact
 
