@@ -5,14 +5,14 @@ from typing import Any, Dict
 
 import joblib
 import numpy as np
+import onnxruntime as ort
 import pandas as pd
 import streamlit as st
-from tensorflow import keras
 
 
 ROOT = Path(__file__).resolve().parent
 ARTIFACTS_DIR = ROOT / "artifacts"
-MODEL_PATH = ARTIFACTS_DIR / "churn_ann_model.keras"
+MODEL_PATH = ARTIFACTS_DIR / "churn_ann_model.onnx"
 PREPROCESSOR_PATH = ARTIFACTS_DIR / "churn_preprocessor.joblib"
 
 
@@ -37,17 +37,24 @@ def load_artifacts() -> Dict[str, Any]:
     if not PREPROCESSOR_PATH.exists():
         raise FileNotFoundError(f"Preprocessor not found: {PREPROCESSOR_PATH}")
 
-    model = keras.models.load_model(MODEL_PATH)
+    model = ort.InferenceSession(str(MODEL_PATH))
     preprocessor = joblib.load(PREPROCESSOR_PATH)
     return {"model": model, "preprocessor": preprocessor}
 
 
-def predict_proba(model: keras.Model, preprocessor: Any, row: Dict[str, Any]) -> float:
+def predict_proba(model: ort.InferenceSession, preprocessor: Any, row: Dict[str, Any]) -> float:
     df = pd.DataFrame([row])[FEATURE_COLUMNS]
     x = preprocessor.transform(df)
     if hasattr(x, "toarray"):
         x = x.toarray()
-    proba = float(model.predict(x, verbose=0).ravel()[0])
+    
+    # Get input name from ONNX model
+    input_name = model.get_inputs()[0].name
+    output_name = model.get_outputs()[0].name
+    
+    # Run inference
+    result = model.run([output_name], {input_name: x.astype(np.float32)})
+    proba = float(result[0].ravel()[0])
     return proba
 
 
